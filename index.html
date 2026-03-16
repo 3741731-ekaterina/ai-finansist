@@ -485,6 +485,20 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   background:rgba(121,89,173,.06);
 }
 .test-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.test-avatar-wrap{display:flex;align-items:center;gap:12px}
+.test-avatar{
+  width:52px;height:52px;border-radius:50%;
+  object-fit:cover;object-position:center top;
+  border:2px solid rgba(121,89,173,.4);
+  flex-shrink:0;
+}
+.test-avatar-fallback{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--violet),var(--magenta));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;color:#fff;flex-shrink:0;
+  border:2px solid rgba(121,89,173,.4);
+}
 .test-name{
   font-family:'Space Grotesk',sans-serif;font-weight:600;
   font-size:16px;color:var(--white);
@@ -1117,14 +1131,17 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
     <div class="reveal">
       <span class="section-tag">Отзывы</span>
       <h2 class="section-title">Что говорят финансисты,<br>которые уже прошли курс</h2>
-      <p class="section-sub">Реальные результаты — не «очень понравилось»</p>
+      <p class="section-sub">Конкретные цифры и результаты — от реальных студентов</p>
     </div>
     <div class="test-grid">
 
       <!-- Olga - featured -->
       <div class="test-card featured reveal">
         <div class="test-head">
-          <div><div class="test-name">Ольга Пахолкова</div><div class="test-role">Главный экономист · Стаж 20+ лет</div></div>
+          <div class="test-avatar-wrap">
+            <img src="Ольга Пахолкова.jpg" alt="Ольга Пахолкова" class="test-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="test-avatar-fallback" style="display:none">О</div>
+            <div><div class="test-name">Ольга Пахолкова</div><div class="test-role">Главный экономист · Стаж 20+ лет</div></div>
+          </div>
           <div class="test-stars">★★★★★</div>
         </div>
         <div class="test-quote main">«Я не проживаю ни дня, чтобы не сделать что-нибудь с помощью AI. И это говорит человек, который до курса использовал нейросети только чтобы рассказать сон DeepSeek'у.»</div>
@@ -1139,7 +1156,10 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
       <!-- Liliya -->
       <div class="test-card reveal" style="transition-delay:.1s">
         <div class="test-head">
-          <div><div class="test-name">Лилия Малова</div><div class="test-role">Финансовый директор</div></div>
+          <div class="test-avatar-wrap">
+            <img src="Лилия малова.jpg" alt="Лилия Малова" class="test-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="test-avatar-fallback" style="display:none">Л</div>
+            <div><div class="test-name">Лилия Малова</div><div class="test-role">Финансовый директор</div></div>
+          </div>
           <div class="test-stars">★★★★★</div>
         </div>
         <div class="test-quote">«Идти на курс — однозначно.»</div>
@@ -1149,7 +1169,10 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
       <!-- Valeria -->
       <div class="test-card reveal" style="transition-delay:.2s">
         <div class="test-head">
-          <div><div class="test-name">Валерия Никитина</div><div class="test-role">Стратегическое сопровождение бизнеса</div></div>
+          <div class="test-avatar-wrap">
+            <img src="Валерия Никитина.jpg" alt="Валерия Никитина" class="test-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="test-avatar-fallback" style="display:none">В</div>
+            <div><div class="test-name">Валерия Никитина</div><div class="test-role">Стратегическое сопровождение бизнеса</div></div>
+          </div>
           <div class="test-stars">★★★★☆</div>
         </div>
         <div class="test-quote">«Идти обязательно — если не понимаете, что такое AI на самом деле, если у вас много рутины.»</div>
