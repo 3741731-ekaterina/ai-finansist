@@ -25,8 +25,8 @@
   --magenta: #C330BE;
   --emerald: #00D4AA;
   --white: #FFFFFF;
-  --body: #D0D8F0;
-  --muted: #7A8BB0;
+  --body: #ECF0FF;
+  --muted: #9AAACE;
   --grad-cta: linear-gradient(135deg, #7959AD, #C330BE);
   --grad-text: linear-gradient(90deg, #fff 0%, #C330BE 60%, #7959AD 100%);
   --shadow-cta: 0 0 28px rgba(195,48,190,0.38);
@@ -39,7 +39,7 @@
 /* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--body);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+body{background:var(--bg);color:var(--body);font-family:'Inter',sans-serif;font-size:16px;line-height:1.7;font-weight:450;overflow-x:hidden}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
@@ -55,7 +55,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 .grad-text{background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .section-tag{display:inline-block;font-size:13px;font-weight:500;color:var(--violet);letter-spacing:.04em;margin-bottom:12px}
 .section-title{margin-bottom:12px}
-.section-sub{color:var(--muted);font-size:17px;max-width:560px}
+.section-sub{color:var(--body);font-size:17px;max-width:560px;opacity:.8}
 
 /* ── PROGRESS BAR ── */
 #progress{position:fixed;top:0;left:0;height:2px;background:var(--grad-cta);z-index:9999;width:0%;transition:width .1s}
@@ -140,12 +140,12 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;
   animation:orbFloat 8s ease-in-out infinite;
 }
-.orb-1{width:500px;height:500px;background:rgba(77,159,255,.12);top:-100px;right:15%;animation-delay:0s}
-.orb-2{width:400px;height:400px;background:rgba(121,89,173,.15);bottom:-80px;right:30%;animation-delay:-4s}
+.orb-1{width:500px;height:500px;background:rgba(77,159,255,.07);top:-100px;right:15%;animation-delay:0s}
+.orb-2{width:400px;height:400px;background:rgba(121,89,173,.08);bottom:-80px;right:30%;animation-delay:-4s}
 /* dot grid */
 .hero-bg::after{
   content:'';position:absolute;inset:0;
-  background-image:radial-gradient(rgba(77,159,255,.06) 1px,transparent 1px);
+  background-image:radial-gradient(rgba(77,159,255,.03) 1px,transparent 1px);
   background-size:32px 32px;
 }
 @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
@@ -256,7 +256,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 }
 .pain-icon{font-size:28px;margin-bottom:14px}
 .pain-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--white);margin-bottom:8px}
-.pain-text{font-size:14px;color:var(--muted);line-height:1.6}
+.pain-text{font-size:15px;color:var(--body);line-height:1.6;opacity:.85}
 .pain-footer{text-align:center;margin-top:48px}
 .pain-footer p{font-size:22px;font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--white);margin-bottom:20px}
 
@@ -522,12 +522,41 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 .result-before{color:rgba(255,100,100,.7);flex:1}
 .result-arrow{color:var(--violet);flex-shrink:0}
 .result-after{color:var(--emerald);flex:1;font-weight:500}
-.test-extra{font-size:14px;color:var(--body);line-height:1.7}
+.test-extra{font-size:15px;color:var(--body);line-height:1.7}
 .test-footer{
   margin-top:48px;text-align:center;
   font-size:18px;font-family:'Space Grotesk',sans-serif;
   font-weight:600;color:var(--white);
   display:flex;flex-direction:column;gap:20px;align-items:center;
+}
+
+/* ── REVIEW SCREENSHOTS ── */
+.reviews-scroll-wrap{overflow:hidden;position:relative}
+.reviews-scroll-wrap::before,.reviews-scroll-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.reviews-scroll-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.reviews-scroll-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.reviews-scroll{
+  display:flex;gap:16px;
+  overflow-x:auto;padding:8px 40px 20px;
+  scroll-snap-type:x mandatory;
+  -ms-overflow-style:none;scrollbar-width:none;
+  cursor:grab;
+}
+.reviews-scroll:active{cursor:grabbing}
+.reviews-scroll::-webkit-scrollbar{display:none}
+.review-screenshot{
+  flex-shrink:0;width:280px;height:auto;
+  border-radius:12px;
+  border:1px solid var(--border);
+  scroll-snap-align:start;
+  transition:transform .3s,box-shadow .3s;
+  object-fit:cover;
+}
+.review-screenshot:hover{transform:scale(1.03);box-shadow:0 8px 32px rgba(121,89,173,.2)}
+@media(max-width:768px){
+  .review-screenshot{width:220px}
 }
 
 /* ═══════════════════════════════════
@@ -1184,6 +1213,25 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
       <span>120+ финансистов уже автоматизировали свою работу</span>
       <a href="#pricing" class="btn-primary">Хочу такой же результат →</a>
     </div>
+
+    <!-- Скриншоты отзывов -->
+    <div class="reviews-scroll-wrap reveal" style="margin-top:48px">
+      <p style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:20px;text-align:center">Скриншоты отзывов студентов</p>
+      <div class="reviews-scroll">
+        <img src="Отзыв 1.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="отзыв 2.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 3.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 4.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 5.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="отзыв 6.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 7.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 8.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 9.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 10.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 11.jpg" alt="Отзыв студента" class="review-screenshot">
+        <img src="Отзыв 12.jpg" alt="Отзыв студента" class="review-screenshot">
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1507,6 +1555,17 @@ function toggleModule(head) {
     body.style.maxHeight = body.scrollHeight + 40 + 'px';
   }
 }
+
+/* ── DRAG SCROLL FOR REVIEWS ── */
+(function(){
+  const el = document.querySelector('.reviews-scroll');
+  if(!el) return;
+  let isDown=false,startX,scrollLeft;
+  el.addEventListener('mousedown',e=>{isDown=true;el.classList.add('active');startX=e.pageX-el.offsetLeft;scrollLeft=el.scrollLeft});
+  el.addEventListener('mouseleave',()=>isDown=false);
+  el.addEventListener('mouseup',()=>isDown=false);
+  el.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-el.offsetLeft;el.scrollLeft=scrollLeft-(x-startX)*1.5});
+})();
 
 /* ── FAQ ACCORDION ── */
 function toggleFaq(qEl) {
