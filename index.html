@@ -553,8 +553,58 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   scroll-snap-align:start;
   transition:transform .3s,box-shadow .3s;
   object-fit:cover;
+  cursor:zoom-in;
 }
 .review-screenshot:hover{transform:scale(1.03);box-shadow:0 8px 32px rgba(121,89,173,.2)}
+
+/* ── LIGHTBOX ── */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:9000;
+  background:rgba(4,4,18,.92);
+  backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;
+  cursor:zoom-out;
+  padding:20px;
+}
+#lightbox.open{display:flex}
+#lightbox img{
+  max-width:min(92vw,640px);
+  max-height:92vh;
+  border-radius:16px;
+  box-shadow:0 0 80px rgba(0,0,0,.7);
+  object-fit:contain;
+  cursor:default;
+  animation:lbIn .2s ease;
+}
+@keyframes lbIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
+#lightbox-close{
+  position:fixed;top:20px;right:24px;
+  font-size:28px;color:rgba(255,255,255,.7);
+  cursor:pointer;line-height:1;z-index:9001;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+#lightbox-close:hover{background:rgba(255,255,255,.2)}
+#lightbox-nav{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;gap:12px;z-index:9001;
+}
+.lb-btn{
+  padding:10px 22px;border-radius:40px;
+  background:rgba(255,255,255,.12);color:#fff;
+  font-size:20px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.15);
+  transition:background .2s;
+}
+.lb-btn:hover{background:rgba(255,255,255,.22)}
+#lightbox-counter{
+  padding:10px 16px;border-radius:40px;
+  background:rgba(0,0,0,.4);color:rgba(255,255,255,.6);
+  font-size:13px;font-family:'DM Mono',monospace;
+  display:flex;align-items:center;
+}
 @media(max-width:768px){
   .review-screenshot{width:220px}
 }
@@ -1443,6 +1493,17 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   </div>
 </footer>
 
+<!-- ═══ LIGHTBOX ═══ -->
+<div id="lightbox">
+  <span id="lightbox-close" title="Закрыть (Esc)">✕</span>
+  <img id="lightbox-img" src="" alt="Отзыв">
+  <div id="lightbox-nav">
+    <button class="lb-btn" id="lb-prev">‹</button>
+    <span id="lightbox-counter">1 / 12</span>
+    <button class="lb-btn" id="lb-next">›</button>
+  </div>
+</div>
+
 <!-- ═══ MOBILE STICKY ═══ -->
 <div id="sticky-cta">
   <a href="#pricing" class="btn-primary">Занять место →</a>
@@ -1555,6 +1616,56 @@ function toggleModule(head) {
     body.style.maxHeight = body.scrollHeight + 40 + 'px';
   }
 }
+
+/* ── LIGHTBOX ── */
+(function(){
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbClose = document.getElementById('lightbox-close');
+  const lbPrev = document.getElementById('lb-prev');
+  const lbNext = document.getElementById('lb-next');
+  const lbCounter = document.getElementById('lightbox-counter');
+  let imgs = [], cur = 0;
+
+  function open(index){
+    cur = index;
+    lbImg.src = imgs[cur].src;
+    lbImg.alt = imgs[cur].alt;
+    lbCounter.textContent = (cur+1) + ' / ' + imgs.length;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+  function prev(){ open((cur - 1 + imgs.length) % imgs.length); }
+  function next(){ open((cur + 1) % imgs.length); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    imgs = Array.from(document.querySelectorAll('.review-screenshot'));
+    imgs.forEach((img, i) => img.addEventListener('click', () => open(i)));
+  });
+
+  lbClose.addEventListener('click', close);
+  lb.addEventListener('click', e => { if(e.target === lb) close(); });
+  lbPrev.addEventListener('click', e => { e.stopPropagation(); prev(); });
+  lbNext.addEventListener('click', e => { e.stopPropagation(); next(); });
+  document.addEventListener('keydown', e => {
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') close();
+    if(e.key === 'ArrowLeft') prev();
+    if(e.key === 'ArrowRight') next();
+  });
+  // touch swipe
+  let tx = 0;
+  lbImg.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+  lbImg.addEventListener('touchend', e => {
+    const diff = tx - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 50) diff > 0 ? next() : prev();
+  });
+})();
 
 /* ── DRAG SCROLL FOR REVIEWS ── */
 (function(){
