@@ -205,12 +205,12 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
 
 .hero-inner{
-  position:relative;z-index:1;
-  display:grid;grid-template-columns:55% 45%;
-  align-items:center;gap:0;width:100%;
+  position:relative;z-index:2;
+  display:flex;align-items:center;
   min-height:calc(100vh - 80px);
+  width:100%;
 }
-.hero-content{padding:60px 0;display:flex;flex-direction:column;gap:28px}
+.hero-content{padding:60px 0;display:flex;flex-direction:column;gap:28px;max-width:580px;position:relative;z-index:2}
 .hero-tag{
   display:inline-flex;align-items:center;gap:8px;
   background:rgba(121,89,173,.15);border:1px solid rgba(121,89,173,.3);
@@ -246,27 +246,55 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 .timer-num{font-family:'DM Mono',monospace;font-size:24px;font-weight:500;color:var(--blue);line-height:1}
 .timer-sub{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 
-.hero-photo{
-  position:relative;height:100%;min-height:500px;
-  display:flex;align-items:center;justify-content:flex-end;
+/* Hero photo — full bleed, no box */
+.hero-photo-bg{
+  position:absolute;right:0;top:0;bottom:0;width:62%;z-index:0;
 }
-.hero-photo-wrap{
-  position:relative;width:100%;max-width:520px;height:580px;margin-left:auto;
-}
-.hero-photo-img{
+.hero-photo-bg img{
   width:100%;height:100%;object-fit:cover;object-position:center top;
-  border-radius:20px;
+  display:block;
 }
 .hero-photo-overlay{
-  position:absolute;inset:0;border-radius:20px;
-  background:linear-gradient(to right,#07071A 0%,rgba(7,7,26,.1) 60%,transparent 100%);
+  position:absolute;inset:0;
+  background:linear-gradient(to right,
+    #07071A 0%,
+    rgba(7,7,26,.94) 12%,
+    rgba(7,7,26,.7)  35%,
+    rgba(7,7,26,.25) 62%,
+    transparent 100%
+  );
 }
-.hero-photo-placeholder{
-  width:100%;height:100%;border-radius:20px;
-  background:linear-gradient(135deg,var(--bg-card) 0%,rgba(77,159,255,.15) 100%);
+.hero-photo-overlay::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(7,7,26,.5) 0%,transparent 20%,transparent 80%,#07071A 100%);
+}
+
+/* Floating AI tools */
+@keyframes toolFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.hero-tools{
+  position:absolute;right:3%;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:10px;z-index:3;
+}
+.tool-float{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(10,10,30,.65);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:10px 16px;
+  cursor:default;
+  animation:toolFloat calc(2.8s + var(--i, 0) * .5s) ease-in-out infinite;
+  animation-delay:calc(var(--i, 0) * .35s);
+  transition:border-color .25s,box-shadow .25s;
+  white-space:nowrap;
+}
+.tool-float:hover{border-color:rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.tool-icon{
+  width:34px;height:34px;border-radius:9px;
   display:flex;align-items:center;justify-content:center;
-  font-size:14px;color:var(--muted);
+  flex-shrink:0;
 }
+.tool-icon svg{width:20px;height:20px}
+.tool-name{font-size:14px;font-weight:600;color:var(--white);font-family:'Space Grotesk',sans-serif}
 
 /* ═══════════════════════════════════
    TRUST BAR
@@ -877,7 +905,8 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 ═══════════════════════════════════ */
 @media(max-width:1024px){
   .hero-inner{grid-template-columns:1fr;min-height:auto}
-  .hero-photo{display:none}
+  .hero-photo-bg{width:50%;opacity:.45}
+  .hero-tools{display:none}
   .about-grid{grid-template-columns:1fr;gap:40px}
   .about-photo-wrap{max-width:360px;margin:0 auto}
   .test-grid{grid-template-columns:1fr}
@@ -892,6 +921,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 }
 
 @media(max-width:768px){
+  .hero-photo-bg{display:none}
   .section{padding:64px 0}
   .pain-grid{grid-template-columns:1fr 1fr}
   .fw-grid{grid-template-columns:1fr}
@@ -1013,13 +1043,49 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
           <div class="timer-unit"><div class="timer-num mono" id="t-sec">--</div><div class="timer-sub">секунд</div></div>
         </div>
       </div>
-      <div class="hero-photo">
-        <div class="hero-photo-wrap">
-          <img src="1.png" alt="Екатерина Яхонтова — эксперт курса" class="hero-photo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="hero-photo-placeholder" style="display:none">Фото эксперта</div>
-          <div class="hero-photo-overlay"></div>
-        </div>
+    </div>
+  </div>
+  <!-- Full-bleed photo — bleeds to screen edge -->
+  <div class="hero-photo-bg">
+    <img src="1.png" alt="Екатерина Яхонтова — эксперт курса" onerror="this.style.display='none'">
+    <div class="hero-photo-overlay"></div>
+  </div>
+  <!-- Floating AI tool icons -->
+  <div class="hero-tools" aria-hidden="true">
+    <!-- ChatGPT -->
+    <div class="tool-float" style="--i:0">
+      <div class="tool-icon" style="background:#10A37F">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M22.28 9.56a5.37 5.37 0 0 0-.46-4.41 5.44 5.44 0 0 0-5.85-2.6A5.43 5.43 0 0 0 11.9 1a5.44 5.44 0 0 0-5.19 3.77 5.43 5.43 0 0 0-3.63 2.63 5.44 5.44 0 0 0 .67 6.38 5.37 5.37 0 0 0 .46 4.41 5.44 5.44 0 0 0 5.85 2.6A5.43 5.43 0 0 0 14.1 23a5.44 5.44 0 0 0 5.19-3.77 5.43 5.43 0 0 0 3.63-2.63 5.44 5.44 0 0 0-.64-6.04zm-8.18 11.47a4.03 4.03 0 0 1-2.58-.94l.13-.07 4.28-2.47a.71.71 0 0 0 .36-.62v-6.04l1.81 1.04a.07.07 0 0 1 .04.05v4.99a4.04 4.04 0 0 1-4.04 4.06zM3.97 17.93a4.03 4.03 0 0 1-.48-2.71l.13.08 4.28 2.47a.71.71 0 0 0 .71 0l5.23-3.02v2.08a.07.07 0 0 1-.03.06l-4.33 2.5a4.04 4.04 0 0 1-5.51-1.46zM3.1 8.13a4.02 4.02 0 0 1 2.1-1.77v5.08a.71.71 0 0 0 .36.62l5.23 3.02-1.81 1.04a.07.07 0 0 1-.07.01L4.6 13.6A4.04 4.04 0 0 1 3.1 8.13zm14.84 3.47-5.23-3.02 1.81-1.04a.07.07 0 0 1 .07-.01l4.31 2.49a4.04 4.04 0 0 1-.63 7.29v-5.08a.71.71 0 0 0-.33-.63zm1.8-2.72-.13-.08-4.27-2.49a.71.71 0 0 0-.71 0L9.4 9.33V7.25a.07.07 0 0 1 .03-.06l4.32-2.49a4.04 4.04 0 0 1 6 4.18zM8.48 12.85 6.67 11.8a.07.07 0 0 1-.04-.05V6.76a4.04 4.04 0 0 1 6.63-3.1l-.13.07-4.28 2.47a.71.71 0 0 0-.36.62l-.01 6.03zm.98-2.12 2.33-1.34 2.33 1.34v2.68l-2.33 1.34-2.33-1.34v-2.68z"/></svg>
       </div>
+      <span class="tool-name">ChatGPT</span>
+    </div>
+    <!-- Cursor -->
+    <div class="tool-float" style="--i:1">
+      <div class="tool-icon" style="background:#1A1A2E;border:1px solid rgba(255,255,255,.15)">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="tool-name">Cursor</span>
+    </div>
+    <!-- DeepSeek -->
+    <div class="tool-float" style="--i:2">
+      <div class="tool-icon" style="background:#1C4ED8">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="tool-name">DeepSeek</span>
+    </div>
+    <!-- Claude -->
+    <div class="tool-float" style="--i:3">
+      <div class="tool-icon" style="background:#CC785C">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-5h2v2h-2zm0-8h2v6h-2z"/></svg>
+      </div>
+      <span class="tool-name">Claude</span>
+    </div>
+    <!-- Gemini -->
+    <div class="tool-float" style="--i:4">
+      <div class="tool-icon" style="background:linear-gradient(135deg,#4285F4,#9B72CB,#D96570)">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/></svg>
+      </div>
+      <span class="tool-name">Gemini</span>
     </div>
   </div>
 </section>
@@ -1777,7 +1843,7 @@ function toggleModule(head) {
 
 /* ── PARALLAX ── */
 (function(){
-  const heroPhoto = document.querySelector('.hero-photo-wrap');
+  const heroPhoto = document.querySelector('.hero-photo-bg img');
   const orb1 = document.querySelector('.orb-1');
   const orb2 = document.querySelector('.orb-2');
   let ticking = false;
