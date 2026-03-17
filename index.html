@@ -79,12 +79,15 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 /* section title underline */
 .section-title{margin-bottom:12px;position:relative;display:inline-block}
 .section-title::after{
-  content:'';position:absolute;bottom:-6px;left:0;
+  content:'';position:absolute;bottom:-6px;left:50%;
   height:2px;width:0;border-radius:2px;
   background:var(--grad-cta);
-  transition:width .9s cubic-bezier(.22,1,.36,1) .3s;
+  transform:translateX(0);
+  transition:width .9s cubic-bezier(.22,1,.36,1) .3s, transform .9s cubic-bezier(.22,1,.36,1) .3s;
 }
-.reveal.visible .section-title::after,.reveal-left.visible .section-title::after{width:64px}
+.reveal.visible .section-title::after,.reveal-left.visible .section-title::after{
+  width:64px;transform:translateX(-32px);
+}
 
 .section-sub{color:var(--body);font-size:17px;max-width:560px;opacity:.82}
 
@@ -1078,16 +1081,8 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 .contacts-btns{display:flex;flex-wrap:wrap;gap:12px}
 @media(max-width:768px){.contacts-block{grid-template-columns:1fr;padding:28px}.contacts-photo{max-width:200px;margin:0 auto}}
 
-/* ── FLOATING 3D BACKGROUND ELEMENTS ── */
-.bg-floats{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-@keyframes floatA{0%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-40px) rotate(180deg)}100%{transform:translateY(0) rotate(360deg)}}
-@keyframes floatB{0%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(30px) rotate(-90deg) scale(1.1)}100%{transform:translateY(0) rotate(-180deg) scale(1)}}
-@keyframes floatC{0%{transform:translateX(0) rotate(0deg)}50%{transform:translateX(20px) rotate(120deg)}100%{transform:translateX(0) rotate(240deg)}}
-.bg-float{position:absolute;opacity:.035;}
-.bg-float-hex{width:80px;height:80px;background:linear-gradient(135deg,var(--violet),var(--blue));clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}
-.bg-float-ring{width:60px;height:60px;border:2px solid var(--blue);border-radius:50%}
-.bg-float-tri{width:0;height:0;border-left:30px solid transparent;border-right:30px solid transparent;border-bottom:52px solid var(--magenta)}
-.bg-float-sq{width:50px;height:50px;background:linear-gradient(45deg,var(--magenta),var(--violet));transform:rotate(45deg)}
+/* ── NETWORK CANVAS BACKGROUND ── */
+#network-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%}
 
 /* ── PAYMENT MODAL ── */
 .payment-modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(7,7,26,.88);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
@@ -1096,18 +1091,11 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 .payment-modal-close{position:absolute;top:10px;right:14px;background:rgba(0,0,0,.08);border:none;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;line-height:1}
 
 /* ── SECTION TITLE UNIFIED COLOR ── */
-section .section-title{color:var(--violet)}
+section .section-title{color:#A47ED6}
 </style>
 </head>
 <body>
-<div class="bg-floats" aria-hidden="true">
-  <div class="bg-float bg-float-hex" style="top:12%;left:8%;animation:floatA 14s ease-in-out infinite"></div>
-  <div class="bg-float bg-float-ring" style="top:28%;left:92%;animation:floatB 11s ease-in-out infinite;animation-delay:-3s"></div>
-  <div class="bg-float bg-float-tri" style="top:55%;left:5%;animation:floatC 17s ease-in-out infinite;animation-delay:-6s"></div>
-  <div class="bg-float bg-float-sq" style="top:70%;left:88%;animation:floatA 13s ease-in-out infinite;animation-delay:-2s"></div>
-  <div class="bg-float bg-float-hex" style="top:85%;left:45%;animation:floatB 15s ease-in-out infinite;animation-delay:-8s;width:50px;height:50px;opacity:.025"></div>
-  <div class="bg-float bg-float-ring" style="top:40%;left:50%;animation:floatC 12s ease-in-out infinite;animation-delay:-4s;width:100px;height:100px;opacity:.02"></div>
-</div>
+<canvas id="network-canvas" aria-hidden="true"></canvas>
 
 <!-- PROGRESS -->
 <div id="progress"></div>
@@ -1934,6 +1922,53 @@ function closePayment(type){
 }
 // Close payment modal on Escape
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePayment('standard');closePayment('business')}});
+
+/* ── NETWORK CANVAS ANIMATION ── */
+(function(){
+  var cv = document.getElementById('network-canvas');
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  var W, H, nodes = [];
+  var N = 70, MAX_D = 160;
+  function resize(){
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+  }
+  function init(){
+    nodes = [];
+    for(var i=0;i<N;i++){
+      nodes.push({
+        x:Math.random()*W, y:Math.random()*H,
+        vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
+        r:Math.random()*1.8+.8
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<nodes.length;i++){
+      for(var j=i+1;j<nodes.length;j++){
+        var dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d<MAX_D){
+          var a=(1-d/MAX_D)*.12;
+          ctx.strokeStyle='rgba(100,160,255,'+a+')';
+          ctx.lineWidth=.6;
+          ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();
+        }
+      }
+      var n=nodes[i];
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(130,170,255,.45)';ctx.fill();
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>W) n.vx*=-1;
+      if(n.y<0||n.y>H) n.vy*=-1;
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); init(); draw();
+  window.addEventListener('resize',function(){resize();init();});
+})();
 
 /* ── PROGRESS BAR ── */
 const progressBar = document.getElementById('progress');
