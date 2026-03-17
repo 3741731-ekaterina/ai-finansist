@@ -79,15 +79,12 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 /* section title underline */
 .section-title{margin-bottom:12px;position:relative;display:inline-block}
 .section-title::after{
-  content:'';position:absolute;bottom:-6px;left:50%;
+  content:'';position:absolute;bottom:-6px;left:0;
   height:2px;width:0;border-radius:2px;
   background:var(--grad-cta);
-  transform:translateX(0);
-  transition:width .9s cubic-bezier(.22,1,.36,1) .3s, transform .9s cubic-bezier(.22,1,.36,1) .3s;
+  transition:width .9s cubic-bezier(.22,1,.36,1) .3s;
 }
-.reveal.visible .section-title::after,.reveal-left.visible .section-title::after{
-  width:64px;transform:translateX(-32px);
-}
+.reveal.visible .section-title::after,.reveal-left.visible .section-title::after{width:64px}
 
 .section-sub{color:var(--body);font-size:17px;max-width:560px;opacity:.82}
 
@@ -1082,11 +1079,17 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 @media(max-width:768px){.contacts-block{grid-template-columns:1fr;padding:28px}.contacts-photo{max-width:200px;margin:0 auto}}
 
 /* ── NETWORK CANVAS BACKGROUND ── */
-#network-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%}
+#network-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;width:100%;height:100%}
 
 /* ── PAYMENT MODAL ── */
-.payment-modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(7,7,26,.88);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
-.payment-modal.open{display:flex}
+.payment-modal{
+  visibility:hidden;opacity:0;pointer-events:none;
+  position:fixed;inset:0;z-index:3000;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(7,7,26,.88);backdrop-filter:blur(10px);
+  transition:opacity .3s,visibility .3s;
+}
+.payment-modal.open{visibility:visible;opacity:1;pointer-events:auto}
 .payment-modal-inner{position:relative;background:#fff;border-radius:20px;padding:12px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.6)}
 .payment-modal-close{position:absolute;top:10px;right:14px;background:rgba(0,0,0,.08);border:none;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;line-height:1}
 
@@ -1230,7 +1233,7 @@ section .section-title{color:#A47ED6}
   <div class="container">
     <div class="reveal" style="text-align:center;max-width:700px;margin:0 auto 56px">
       <h2 class="section-title" style="font-size:clamp(24px,3vw,42px)">ЭТО НЕ ПРОСТО «ЕЩЕ ОДИН КУРС ПО НЕЙРОСЕТЯМ»</h2>
-      <p class="section-sub">А твёрдая методология и системный подход к применению нейросетей. То, что сделает вас ТОПом на рынке бухгалтеров и финансистов.</p>
+      <p class="section-sub" style="text-align:center;margin:0 auto">А твёрдая методология и системный подход<br>к применению нейросетей.<br>То, что сделает вас ТОПом на рынке бухгалтеров и финансистов.</p>
     </div>
     <div class="njc-list reveal" style="margin-top:0">
       <div class="njc-item">
@@ -1321,9 +1324,9 @@ section .section-title{color:#A47ED6}
   <div class="container">
     <div class="reveal" style="text-align:center">
       <h2 class="section-title">ПРОГРАММА КУРСА</h2>
-      <p class="section-sub">От «Что такое ИИ» до «50% задач выполняет нейросеть» — каждый модуль = конкретный рабочий результат. Без теории ради теории.</p>
+      <p class="section-sub" style="text-align:center;margin:0 auto">От «Что такое ИИ» до «50% задач выполняет нейросеть» — каждый модуль = конкретный рабочий результат. Без теории ради теории.</p>
     </div>
-    <div class="cur-meta reveal">
+    <div class="cur-meta reveal" style="justify-content:center">
       <div class="cur-meta-item"><div class="cur-meta-num">7</div><div class="cur-meta-label">Модулей</div></div>
       <div class="cur-meta-item"><div class="cur-meta-num">45</div><div class="cur-meta-label">Уроков</div></div>
       <div class="cur-meta-item"><div class="cur-meta-num">35+</div><div class="cur-meta-label">Готовых<br>инструментов</div></div>
@@ -1864,13 +1867,13 @@ section .section-title{color:#A47ED6}
 <div class="payment-modal" id="pm-standard" onclick="if(event.target===this)closePayment('standard')">
   <div class="payment-modal-inner">
     <button class="payment-modal-close" onclick="closePayment('standard')">✕</button>
-    <div id="pm-standard-form"></div>
+    <script id="324d908ebb0b4b83de0f18adbd8257f6b1e8eeab" src="https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571253"></script>
   </div>
 </div>
 <div class="payment-modal" id="pm-business" onclick="if(event.target===this)closePayment('business')">
   <div class="payment-modal-inner">
     <button class="payment-modal-close" onclick="closePayment('business')">✕</button>
-    <div id="pm-business-form"></div>
+    <script id="047cc5da13f6e23225873faf0883fbf8799b0f9c" src="https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571250"></script>
   </div>
 </div>
 
@@ -1895,25 +1898,10 @@ section .section-title{color:#A47ED6}
 <script>
 // Payment modal
 function openPayment(type){
-  var id = 'pm-' + type;
-  var modal = document.getElementById(id);
+  var modal = document.getElementById('pm-'+type);
   if(!modal) return;
   modal.classList.add('open');
   document.body.style.overflow='hidden';
-  // Dynamically load GetCourse script once
-  var formDiv = document.getElementById(id + '-form');
-  if(!formDiv.dataset.loaded){
-    var s = document.createElement('script');
-    if(type==='standard'){
-      s.id='324d908ebb0b4b83de0f18adbd8257f6b1e8eeab';
-      s.src='https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571253';
-    } else {
-      s.id='047cc5da13f6e23225873faf0883fbf8799b0f9c';
-      s.src='https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571250';
-    }
-    formDiv.appendChild(s);
-    formDiv.dataset.loaded='1';
-  }
 }
 function closePayment(type){
   var modal = document.getElementById('pm-'+type);
