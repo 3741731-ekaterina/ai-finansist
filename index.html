@@ -17,8 +17,8 @@
 <style>
 /* ── VARIABLES ── */
 :root {
-  --bg: #07071A;
-  --bg-card: #0F102A;
+  --bg: #0D0D24;
+  --bg-card: #13143A;
   --bg-nested: #161830;
   --blue: #4D9FFF;
   --violet: #7959AD;
@@ -39,7 +39,7 @@
 /* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--body);font-family:'Inter',sans-serif;font-size:16px;line-height:1.7;font-weight:450;overflow-x:hidden}
+body{background:var(--bg);background:linear-gradient(180deg,#0D0D24 0%,#0F0E2E 35%,#0C1030 65%,#0D0D24 100%);background-attachment:fixed;color:var(--body);font-family:'Inter',sans-serif;font-size:16px;line-height:1.7;font-weight:450;overflow-x:hidden}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
@@ -1077,9 +1077,37 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 .contacts-sub{font-size:17px;color:var(--muted);line-height:1.6;margin-bottom:28px}
 .contacts-btns{display:flex;flex-wrap:wrap;gap:12px}
 @media(max-width:768px){.contacts-block{grid-template-columns:1fr;padding:28px}.contacts-photo{max-width:200px;margin:0 auto}}
+
+/* ── FLOATING 3D BACKGROUND ELEMENTS ── */
+.bg-floats{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+@keyframes floatA{0%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-40px) rotate(180deg)}100%{transform:translateY(0) rotate(360deg)}}
+@keyframes floatB{0%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(30px) rotate(-90deg) scale(1.1)}100%{transform:translateY(0) rotate(-180deg) scale(1)}}
+@keyframes floatC{0%{transform:translateX(0) rotate(0deg)}50%{transform:translateX(20px) rotate(120deg)}100%{transform:translateX(0) rotate(240deg)}}
+.bg-float{position:absolute;opacity:.035;}
+.bg-float-hex{width:80px;height:80px;background:linear-gradient(135deg,var(--violet),var(--blue));clip-path:polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%)}
+.bg-float-ring{width:60px;height:60px;border:2px solid var(--blue);border-radius:50%}
+.bg-float-tri{width:0;height:0;border-left:30px solid transparent;border-right:30px solid transparent;border-bottom:52px solid var(--magenta)}
+.bg-float-sq{width:50px;height:50px;background:linear-gradient(45deg,var(--magenta),var(--violet));transform:rotate(45deg)}
+
+/* ── PAYMENT MODAL ── */
+.payment-modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(7,7,26,.88);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+.payment-modal.open{display:flex}
+.payment-modal-inner{position:relative;background:#fff;border-radius:20px;padding:12px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.6)}
+.payment-modal-close{position:absolute;top:10px;right:14px;background:rgba(0,0,0,.08);border:none;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1;line-height:1}
+
+/* ── SECTION TITLE UNIFIED COLOR ── */
+section .section-title{color:var(--violet)}
 </style>
 </head>
 <body>
+<div class="bg-floats" aria-hidden="true">
+  <div class="bg-float bg-float-hex" style="top:12%;left:8%;animation:floatA 14s ease-in-out infinite"></div>
+  <div class="bg-float bg-float-ring" style="top:28%;left:92%;animation:floatB 11s ease-in-out infinite;animation-delay:-3s"></div>
+  <div class="bg-float bg-float-tri" style="top:55%;left:5%;animation:floatC 17s ease-in-out infinite;animation-delay:-6s"></div>
+  <div class="bg-float bg-float-sq" style="top:70%;left:88%;animation:floatA 13s ease-in-out infinite;animation-delay:-2s"></div>
+  <div class="bg-float bg-float-hex" style="top:85%;left:45%;animation:floatB 15s ease-in-out infinite;animation-delay:-8s;width:50px;height:50px;opacity:.025"></div>
+  <div class="bg-float bg-float-ring" style="top:40%;left:50%;animation:floatC 12s ease-in-out infinite;animation-delay:-4s;width:100px;height:100px;opacity:.02"></div>
+</div>
 
 <!-- PROGRESS -->
 <div id="progress"></div>
@@ -1244,29 +1272,10 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   </div>
 </section>
 
-<!-- ═══ PAIN ═══ -->
-<section id="pain" class="section">
-  <div class="container">
-    <div class="pain-grid">
-      <div class="pain-card reveal"><div class="pain-icon">⏰</div><div class="pain-title">Отчёт занимает дни, а не часы</div><div class="pain-text">Вы тратите 3–5 дней на то, что коллеги с AI делают за час</div></div>
-      <div class="pain-card reveal" style="transition-delay:.1s"><div class="pain-icon">🤖</div><div class="pain-title">ChatGPT пробовали — не прижилось</div><div class="pain-text">Слышали про нейросети, может даже открывали. Но непонятно как применить к вашим задачам</div></div>
-      <div class="pain-card reveal" style="transition-delay:.2s"><div class="pain-icon">📊</div><div class="pain-title">Сборка бюджета — это боль</div><div class="pain-text">Сотни строк, формулы, сверки. Каждый месяц одно и то же — вручную</div></div>
-      <div class="pain-card reveal" style="transition-delay:.1s"><div class="pain-icon">😰</div><div class="pain-title">«Вас заменит AI» — это страшно</div><div class="pain-text">Слышите это и не знаете, что ответить. Хочется быть уверены в своём будущем</div></div>
-      <div class="pain-card reveal" style="transition-delay:.2s"><div class="pain-icon">📈</div><div class="pain-title">Руководство ожидает больше</div><div class="pain-text">«Используете AI в работе?» — этот вопрос уже задают. А у вас нет ответа</div></div>
-      <div class="pain-card reveal" style="transition-delay:.3s"><div class="pain-icon">⚡</div><div class="pain-title">Рутина съедает ресурс на главное</div><div class="pain-text">На стратегию, семью, развитие — времени не остаётся. Всё уходит на операционку</div></div>
-    </div>
-    <div class="pain-footer reveal">
-      <p>Это решаемо. За 7 модулей.</p>
-      <a href="#pricing" class="btn-primary">Хочу решить это →</a>
-    </div>
-  </div>
-</section>
-
 <!-- ═══ FOR WHOM ═══ -->
 <section id="for-whom" class="section" style="padding-top:0">
   <div class="container">
     <div class="reveal">
-      <span class="section-tag">Для кого</span>
       <h2 class="section-title">Этот курс для вас, если вы финдир или бухгалтер</h2>
     </div>
     <div class="fw-grid">
@@ -1286,7 +1295,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 <section id="transformation" class="section" style="padding-top:0">
   <div class="container">
     <div class="reveal">
-      <h2 class="section-title" style="color:var(--violet);text-transform:uppercase;font-size:clamp(14px,1.5vw,18px);font-weight:600;letter-spacing:.05em">До и после курса</h2>
+      <h2 class="section-title" style="text-transform:uppercase;font-size:clamp(14px,1.5vw,18px);font-weight:600;letter-spacing:.05em">До и после курса</h2>
     </div>
     <div class="ba-grid reveal">
       <div class="ba-col ba-before">
@@ -1322,8 +1331,8 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 <!-- ═══ CURRICULUM ═══ -->
 <section id="curriculum" class="section">
   <div class="container">
-    <div class="reveal">
-      <h2 class="section-title" style="color:var(--violet)">ПРОГРАММА КУРСА</h2>
+    <div class="reveal" style="text-align:center">
+      <h2 class="section-title">ПРОГРАММА КУРСА</h2>
       <p class="section-sub">От «Что такое ИИ» до «50% задач выполняет нейросеть» — каждый модуль = конкретный рабочий результат. Без теории ради теории.</p>
     </div>
     <div class="cur-meta reveal">
@@ -1457,7 +1466,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 <section class="section">
   <div class="container">
     <div class="reveal" style="text-align:center">
-      <h2 class="section-title" style="color:var(--violet)">Что входит в обучение</h2>
+      <h2 class="section-title">Что входит в обучение</h2>
     </div>
     <div class="included-grid">
       <div class="included-card reveal">
@@ -1496,7 +1505,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 <section class="section" style="padding-top:0">
   <div class="container">
     <div class="reveal" style="text-align:center">
-      <h2 class="section-title" style="color:var(--violet)">Как проходит обучение</h2>
+      <h2 class="section-title">Как проходит обучение</h2>
     </div>
     <div class="hiw-grid">
       <div class="hiw-card reveal">
@@ -1580,7 +1589,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
             <div class="pricing-item yes"><span class="icon">✓</span>Сертификат об окончании курса</div>
           </div>
         </div>
-        <div class="pricing-cta"><script id="324d908ebb0b4b83de0f18adbd8257f6b1e8eeab" src="https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571253"></script></div>
+        <div class="pricing-cta"><button onclick="openPayment('standard')" class="btn-primary" style="width:100%;justify-content:center;cursor:pointer;border:none">Записаться на курс →</button></div>
       </div>
 
       <!-- BUSINESS -->
@@ -1622,7 +1631,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
             <div class="pricing-item yes"><span class="icon">✓</span>Сертификат об окончании курса</div>
           </div>
         </div>
-        <div class="pricing-cta"><script id="047cc5da13f6e23225873faf0883fbf8799b0f9c" src="https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571250"></script></div>
+        <div class="pricing-cta"><button onclick="openPayment('business')" class="btn-primary" style="width:100%;justify-content:center;cursor:pointer;border:none">Записаться на курс →</button></div>
       </div>
 
     </div>
@@ -1639,7 +1648,6 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 <section id="about" class="section">
   <div class="container">
     <div class="reveal">
-      <span class="section-tag">Кто ведёт курс</span>
       <h2 class="section-title">Екатерина Яхонтова</h2>
     </div>
     <div class="about-grid">
@@ -1732,7 +1740,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 
     <!-- Скриншоты отзывов -->
     <div class="reviews-scroll-wrap reveal" style="margin-top:48px">
-      <p style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:20px;text-align:center">Скриншоты отзывов студентов</p>
+      <p style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:20px;text-align:center">Отзывы студентов</p>
       <div class="reviews-scroll">
         <img src="Отзыв 1.jpg" alt="Отзыв студента" class="review-screenshot">
         <img src="отзыв 2.jpg" alt="Отзыв студента" class="review-screenshot">
@@ -1758,7 +1766,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   <div class="final-cta-photo-overlay"></div>
   <div class="container">
     <div class="final-cta-inner reveal">
-      <h2 class="final-cta-h2" style="font-size:clamp(30px,4.5vw,60px);white-space:normal;max-width:900px"><span style="white-space:nowrap">AI не заменит финансиста.</span><br><span class="grad-text">Но заменит того,<br>кто им не умеет пользоваться.</span></h2>
+      <h2 class="final-cta-h2" style="font-size:clamp(30px,4.5vw,60px);white-space:normal;max-width:900px"><span style="white-space:nowrap">AI не заменит финансиста.</span><br><span class="grad-text" style="white-space:normal">Но заменит того, кто им<br>не умеет пользоваться.</span></h2>
       <p class="final-cta-sub">Старт 2 апреля · Осталось 20 мест</p>
       <div class="final-cta-timer">
         <div class="timer-unit"><div class="timer-num mono" id="t2-days">--</div><div class="timer-sub">дней</div></div>
@@ -1767,7 +1775,6 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
         <div class="timer-unit"><div class="timer-num mono" id="t2-sec">--</div><div class="timer-sub">секунд</div></div>
       </div>
       <a href="https://t.me/yakhontova_finance" target="_blank" class="btn-primary" style="font-size:18px;padding:16px 36px">Занять место на курсе →</a>
-      <div class="final-cta-tg">Есть вопросы? → <a href="https://t.me/yakhontova_finance" target="_blank">Написать в Telegram</a></div>
     </div>
   </div>
 </section>
@@ -1776,7 +1783,6 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 <section id="faq" class="section" style="padding-top:0">
   <div class="container">
     <div class="reveal" style="text-align:center">
-      <span class="section-tag">FAQ</span>
       <h2 class="section-title">Частые вопросы</h2>
     </div>
     <div class="faq-list">
@@ -1866,6 +1872,20 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   </div>
 </footer>
 
+<!-- ═══ PAYMENT MODALS ═══ -->
+<div class="payment-modal" id="pm-standard" onclick="if(event.target===this)closePayment('standard')">
+  <div class="payment-modal-inner">
+    <button class="payment-modal-close" onclick="closePayment('standard')">✕</button>
+    <div id="pm-standard-form"></div>
+  </div>
+</div>
+<div class="payment-modal" id="pm-business" onclick="if(event.target===this)closePayment('business')">
+  <div class="payment-modal-inner">
+    <button class="payment-modal-close" onclick="closePayment('business')">✕</button>
+    <div id="pm-business-form"></div>
+  </div>
+</div>
+
 <!-- ═══ LIGHTBOX ═══ -->
 <div id="lightbox">
   <span id="lightbox-close" title="Закрыть (Esc)">✕</span>
@@ -1885,6 +1905,36 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 
 <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
 <script>
+// Payment modal
+function openPayment(type){
+  var id = 'pm-' + type;
+  var modal = document.getElementById(id);
+  if(!modal) return;
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+  // Dynamically load GetCourse script once
+  var formDiv = document.getElementById(id + '-form');
+  if(!formDiv.dataset.loaded){
+    var s = document.createElement('script');
+    if(type==='standard'){
+      s.id='324d908ebb0b4b83de0f18adbd8257f6b1e8eeab';
+      s.src='https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571253';
+    } else {
+      s.id='047cc5da13f6e23225873faf0883fbf8799b0f9c';
+      s.src='https://yahontovaschool.getcourse.ru/pl/lite/widget/script?id=1571250';
+    }
+    formDiv.appendChild(s);
+    formDiv.dataset.loaded='1';
+  }
+}
+function closePayment(type){
+  var modal = document.getElementById('pm-'+type);
+  if(modal) modal.classList.remove('open');
+  document.body.style.overflow='';
+}
+// Close payment modal on Escape
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePayment('standard');closePayment('business')}});
+
 /* ── PROGRESS BAR ── */
 const progressBar = document.getElementById('progress');
 window.addEventListener('scroll', () => {
