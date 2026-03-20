@@ -580,12 +580,30 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 /* ═══════════════════════════════════
    TESTIMONIALS
 ═══════════════════════════════════ */
-.test-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:16px;margin-top:48px;
+.test-grid-wrap{
+  position:relative;
+  overflow:hidden;
 }
-.test-card.featured{grid-column:1/-1}
+.test-grid-wrap::before,.test-grid-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+.test-grid-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.test-grid-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.test-grid{
+  display:flex;
+  gap:16px;margin-top:48px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -ms-overflow-style:none;scrollbar-width:none;
+  cursor:grab;
+  padding:8px 8px 20px;
+}
+.test-grid::-webkit-scrollbar{display:none}
+.test-grid:active{cursor:grabbing}
 .test-card{
+  flex-shrink:0;
+  width:min(420px,82vw);
+  scroll-snap-align:start;
   padding:28px 24px;border-radius:var(--r);
   background:rgba(255,255,255,.035);
   border:1px solid var(--border);
@@ -594,6 +612,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
 }
 .test-card:hover{border-color:rgba(121,89,173,.45);transform:translateY(-6px);box-shadow:0 24px 48px rgba(121,89,173,.15)}
 .test-card.featured{
+  width:min(560px,88vw);
   border-color:rgba(121,89,173,.3);
   background:rgba(121,89,173,.06);
 }
@@ -947,7 +966,7 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
   .hero-visual{display:none}
   .about-grid{grid-template-columns:1fr;gap:40px}
   .about-photo-wrap{max-width:360px;margin:0 auto}
-  .test-grid{grid-template-columns:1fr}
+  .test-grid{padding-left:20px;padding-right:20px}
   .pricing-grid{grid-template-columns:1fr;max-width:480px}
   .footer-top{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}
   .footer-cta{grid-column:1/-1;text-align:left}
@@ -1729,6 +1748,7 @@ section .section-title{color:#A47ED6}
       <h2 class="section-title">Что говорят финансисты,<br>которые уже прошли курс</h2>
       <p class="section-sub">Конкретные цифры и результаты — от реальных студентов</p>
     </div>
+    <div class="test-grid-wrap">
     <div class="test-grid">
 
       <!-- Olga - featured -->
@@ -1798,6 +1818,7 @@ section .section-title{color:#A47ED6}
       </div>
 
     </div>
+    </div><!-- /test-grid-wrap -->
     <div class="test-footer reveal">
       <span>120+ финансистов уже автоматизировали свою работу</span>
       <a href="#pricing" class="btn-primary" style="color:#fff">Хочу такой же результат →</a>
@@ -2252,15 +2273,20 @@ function toggleModule(head) {
   });
 })();
 
-/* ── DRAG SCROLL FOR REVIEWS ── */
+/* ── DRAG SCROLL FOR REVIEWS & TESTIMONIALS ── */
 (function(){
-  const el = document.querySelector('.reviews-scroll');
+  ['.reviews-scroll','.test-grid'].forEach(sel=>{
+  const el = document.querySelector(sel);
   if(!el) return;
   let isDown=false,startX,scrollLeft;
   el.addEventListener('mousedown',e=>{isDown=true;el.classList.add('active');startX=e.pageX-el.offsetLeft;scrollLeft=el.scrollLeft});
   el.addEventListener('mouseleave',()=>isDown=false);
   el.addEventListener('mouseup',()=>isDown=false);
   el.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-el.offsetLeft;el.scrollLeft=scrollLeft-(x-startX)*1.5});
+  let tx=0;
+  el.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  el.addEventListener('touchend',e=>{const diff=tx-e.changedTouches[0].clientX;if(Math.abs(diff)>30)el.scrollLeft+=diff*1.2},{passive:true});
+  });
 })();
 
 /* ── FAQ ACCORDION ── */
