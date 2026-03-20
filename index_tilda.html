@@ -581,9 +581,10 @@ h3{font-size:clamp(18px,2vw,26px);font-weight:600}
    TESTIMONIALS
 ═══════════════════════════════════ */
 .test-grid{
-  display:grid;grid-template-columns:1.4fr 1fr 1fr;
+  display:grid;grid-template-columns:repeat(2,1fr);
   gap:16px;margin-top:48px;
 }
+.test-card.featured{grid-column:1/-1}
 .test-card{
   padding:28px 24px;border-radius:var(--r);
   background:rgba(255,255,255,.035);
@@ -1773,6 +1774,27 @@ section .section-title{color:#A47ED6}
         </div>
         <div class="test-quote">«Идти обязательно — если не понимаете, что такое AI на самом деле, если у вас много рутины.»</div>
         <div class="test-extra">До: применяла AI хаотично.<br><br>Получила: научилась делать AI-агентов, разобралась с промптами, доработала и упаковала свои услуги.<br><br>«Момент "вау": написание больших кодов без знания программирования и возможность сразу внедрить в работу.»</div>
+      </div>
+
+      <!-- Maria Ermakova -->
+      <div class="test-card reveal" style="grid-column:1/-1;transition-delay:.3s">
+        <div class="test-head">
+          <div class="test-avatar-wrap">
+            <img src="https://i.yapx.ru/dM0IA.png" alt="Мария Ермакова" class="test-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="test-avatar-fallback" style="display:none">М</div>
+            <div>
+              <div class="test-name"><a href="https://t.me/provediuchet" target="_blank" style="color:inherit;border-bottom:1px solid rgba(77,159,255,.35);padding-bottom:1px">Мария Ермакова</a></div>
+              <div class="test-role">Финансовый директор · <a href="https://t.me/provediuchet" target="_blank" style="color:var(--blue);font-size:12px">@provediuchet</a></div>
+            </div>
+          </div>
+          <div class="test-stars">★★★★★</div>
+        </div>
+        <div class="test-quote">«До курса нейросети были для меня чем-то из области фантастики. Теперь это мой личный ассистент — и с формулами, и с анализом, и с контентом для канала.»</div>
+        <div class="test-results">
+          <div class="test-result-row"><div class="result-before">Сверка реестра 890 строк — 4–5 часов</div><div class="result-arrow">→</div><div class="result-after">35 минут с первого промта</div></div>
+          <div class="test-result-row"><div class="result-before">Сложные формулы — искала в интернете, копировала</div><div class="result-arrow">→</div><div class="result-after">Пишет сама с первого раза. «Мне теперь ничего не страшно»</div></div>
+          <div class="test-result-row"><div class="result-before">Telegram-канал — не решалась вести</div><div class="result-arrow">→</div><div class="result-after">Пишет несколько раз в неделю с помощью ИИ</div></div>
+        </div>
+        <div class="test-extra">«Написала скрипт для своего сайта — квиз, который подбирает клиенту нужный продукт. Без знания программирования. После курса я даже не представляла, что это вообще возможно.»<br><br>Совет коллегам: «Думать не надо — без нейросети уже не получится работать так же эффективно. Это колоссальная экономия времени и поддержка в уверенности в себе.»</div>
       </div>
 
     </div>
